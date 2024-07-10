@@ -1,0 +1,811 @@
+
+
+
+# This workflow will build and push a node.js application to an Azure Web App when a commit is pushed to your default branch.
+#
+# This workflow assumes you have already created the target Azure App Service web app.
+# For instructions see https://docs.microsoft.com/en-us/azure/app-service/quickstart-nodejs?tabs=linux&pivots=development-environment-cli
+#
+# To configure this workflow:
+#
+# 1. Download the Publish Profile for your Azure Web App. You can download this file from the Overview page of your Web App in the Azure Portal.
+#    For more information: https://docs.microsoft.com/en-us/azure/app-service/deploy-github-actions?tabs=applevel#generate-deployment-credentials
+#
+# 2. Create a secret in your repository named AZURE_WEBAPP_PUBLISH_PROFILE, paste the publish profile contents as the value of the secret.
+#    For instructions on obtaining the publish profile see: https://docs.microsoft.com/azure/app-service/deploy-github-actions#configure-the-github-secret
+#
+# 3. Change the value for the AZURE_WEBAPP_NAME. Optionally, change the AZURE_WEBAPP_PACKAGE_PATH and NODE_VERSION environment variables below.
+#
+# For more information on GitHub Actions for Azure: https://github.com/Azure/Actions
+# For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: your-app-name    # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
+  NODE_VERSION: '14.x'                # set this to the node version to use
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: npm install, build, and test
+      run: |
+        npm install
+        npm run build --if-present
+        npm run test --if-present
+
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v3
+      with:
+        name: node-app
+        path: .
+
+  deploy:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Development'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v3
+      with:
+        name: node-app
+
+    - name: 'Deploy to Azure WebApp'
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        public static MauiApp CreateMauiApp()
+{
+  var builder = MauiApp.CreateBuilder();
+  builder
+    .UseMauiApp<App>()
+
+    // Add this section anywhere on the builder:
+    .UseSentry(options => {
+      // The DSN is the only required setting.
+      options.Dsn = "https://9442a55d4fe347286f6d34c972153b36@o4507557156618240.ingest.us.sentry.io/4507557166645248";
+
+      // Use debug mode if you want to see what the SDK is doing.
+      // Debug messages are written to stdout with Console.Writeline,
+      // and are viewable in your IDE's debug console or with 'adb logcat', etc.
+      // This option is not recommended when deploying your application.
+      options.Debug = true;
+
+      // Set TracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+      // We recommend adjusting this value in production.
+      options.TracesSampleRate = 1.0;
+
+      // Sample rate for profiling, applied on top of othe TracesSampleRate,
+      // e.g. 0.2 means we want to profile 20 % of the captured transactions.
+      // We recommend adjusting this value in production.
+      options.ProfilesSampleRate = 1.0;
+
+      // Other Sentry options can be set here.
+  })
+
+  // ... the remainder of your MAUI app setup
+
+  return builder.Build();
+}
+
+dotnet add package Sentry.Maui -v 4.8.1
+Install-Package Sentry.Profiling -Version 4.8.1
+SentrySdk.CaptureMessage("Hello Sentry");
+var httpHandler = new SentryHttpMessageHandler();
+var httpClient = new HttpClient(httpHandler);
+// Transaction can be started by providing, at minimum, the name and the operation
+var transaction = SentrySdk.StartTransaction(
+  "test-transaction-name",
+  "test-transaction-operation"
+);
+
+// Transactions can have child spans (and those spans can have child spans as well)
+var span = transaction.StartChild("test-child-operation");
+
+// ...
+// (Perform the operation represented by the span/transaction)
+// ...
+
+span.Finish(); // Mark the span as finished
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+    <key>UIDeviceFamily</key>
+    <array>
+        <integer>1</integer>
+        <integer>2</integer>
+    </array>
+    <key>UIRequiredDeviceCapabilities</key>
+    <array>
+        <string>arm64</string>
+    </array>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationPortraitUpsideDown</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>XSAppIconAssets</key>
+    <string>Assets.xcassets/appicon.appiconset</string>
+</dict>
+</plist>
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+
+
+        Content-Type: application/pkcs7-mime; name="smime.p7m"; smime-type=enveloped-data
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7m"
+Content-Description: S/MIME Encrypted Message
+Content-Type: application/pkcs7-mime; name="smime.p7m"; smime-type=enveloped-data
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7m"
+Content-Description: S/MIME Encrypted Message
+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
+
+Receive\d: from BY3PR18MB4673.namprd18.prod.outlook.com (2603:10b6:a03:3c4::20)
+ by IA2PR18MB5861.namprd18.prod.outlook.com with HTTPS; Sun, 30 Jun 2024
+ 07:02:29 +0000
+Received: from CH0PR03CA0207.namprd03.prod.outlook.com (2603:10b6:610:e4::32)
+ by BY3PR18MB4673.namprd18.prod.outlook.com (2603:10b6:a03:3c4::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.29; Sun, 30 Jun
+ 2024 07:02:27 +0000
+Received: from CH1PEPF0000AD82.namprd04.prod.outlook.com
+ (2603:10b6:610:e4:cafe::93) by CH0PR03CA0207.outlook.office365.com
+ (2603:10b6:610:e4::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.29 via Frontend
+ Transport; Sun, 30 Jun 2024 07:02:27 +0000
+Received: from us2-emailsignatures-cloud.codetwo.com (52.240.209.173) by
+ CH1PEPF0000AD82.mail.protection.outlook.com (10.167.244.91) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7741.18 via Frontend Transport; Sun, 30 Jun 2024 07:02:27 +0000
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.40) by us2-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Sun, 30 Jun 2024 07:02:25 +0000
+Received: from MW5PR18MB5149.namprd18.prod.outlook.com (2603:10b6:303:1c7::13)
+ by BL1PR18MB4165.namprd18.prod.outlook.com (2603:10b6:208:310::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.29; Sun, 30 Jun
+ 2024 07:02:22 +0000
+Received: from MW5PR18MB5149.namprd18.prod.outlook.com
+ ([fe80::d355:ae9e:2b7:1579]) by MW5PR18MB5149.namprd18.prod.outlook.com
+ ([fe80::d355:ae9e:2b7:1579%4]) with mapi id 15.20.7698.024; Sun, 30 Jun 2024
+ 07:02:21 +0000
+From: Tim Henderson <contact@charleshendersonandhendfam.online>
+To: "Charles Henderson and HENDFAM, INC."
+	<tim@charleshendersonandhendfam.online>
+Subject:
+Thread-Index: AQHayrtzJEbZVUtEAUuw4KwaPg3Sug==
+Date: Sun, 30 Jun 2024 07:02:21 +0000
+Message-ID:
+	<D13CF1B0-85F0-437E-A31B-2A29133C3C25@charleshendersonandhendfam.online>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Exchange-Organization-AuthAs: Internal
+X-MS-Exchange-Organization-AuthMechanism: 04
+X-MS-Exchange-Organization-AuthSource: MW5PR18MB5149.namprd18.prod.outlook.com
+X-MS-Has-Attach: yes
+X-MS-Exchange-Organization-Network-Message-Id:
+	546afe3a-a675-4cde-3a92-08dc98d299e1
+X-MS-Exchange-Organization-SCL: 1
+X-MS-TNEF-Correlator:
+X-MS-Exchange-Organization-RecordReviewCfmType: 0
+x-ms-publictraffictype: Email
+received-spf: Fail (protection.outlook.com: domain of
+ charleshendersonandhendfam.online does not designate 52.240.209.173 as
+ permitted sender) receiver=protection.outlook.com; client-ip=52.240.209.173;
+ helo=us2-emailsignatures-cloud.codetwo.com;
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(425001)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	MXap4k0tPsfgBSllwTdUTIvFn4HGrJLzyBHRZ4Dy1L3Qwvcx2PNT/ysXKDQUxb0VZyNhEdESACGaS2h+xQPZ1B9pQ74d+ckom6yBUwyaJ1hLGYHA5m1GTzapBAT9ghGoZqqawHbDRjgl4JOXPU9zthq9JiwjqpAdmcgPXYJ59jJD6qvYq+lQO8W9JHYokTO13A0yYvedYs70ZJ64XUVXLA09xqFoXrWfc7gCBCo4Ji6sgcQ4VINTcB9XLkwJbhW+ZLNgmuH/133SWWCdWqWRMY1/8FVSlA0JFLkk2BX5DMbML9QayZrcfuN0EDAE/ouAIPzpcXz57pUerETfndzFm0SfLzhvKIYXY5P4QD6fsq5WNnboKKolZ7lw1wAq3d9wabn8yll9OtQmwp0g6BvZGsBNARrkHL1a4+tg3SIM6LmSJ2AHMhwBjXW9I+Af1zrFpWj0tJ+nJHtNzlzOGnLJwoqW+/dPUUiBApoQ5iQZSqDs/QJ0BGf8b35VkTmDkbNeeKiJPgd2OY35HsvpmMoYx8XHaPP2QXie/cvxdxgoTKbNatwLostTRMYBYxUVYT0tDqpcpTxoR6rxfdhMA0aCny0AbVtXDbiSQC8XKypU24qSC6a5jDAAvANj6HWi7EovDlWrE3+L+CbC30KG+yPOjcvfgg5kNa84Xm9gWNxAZqpw4Qq/oiTUzriirWbgFJDpI1cL76kXSK65w9PnnAaYdzlJGoitVWDUVrl0T6CwxiB9iXB1BKVgGk5+u4z/4lWQsZ0d+IkQkQ+oKA33JAYTArDTzyMKStt1KUj/JyaUgJrPKryKWAkLqJc55e4qiCdIQWHXuGQnPgl8JZFzktooZ1pns2b73l+qZwewFyc7nCEH8pIwdo4xcow1xw3dbQGsQbxsCYqBUqaCVZ2mpxQBD2IbXjTliCyCEeIGKMmIrns=
+Content-Type: multipart/mixed;
+	boundary="_004_D13CF1B085F0437EA31B2A29133C3C25charleshendersonandhend_"
+MIME-Version: 1.0
+
+--_004_D13CF1B085F0437EA31B2A29133C3C25charleshendersonandhend_
+Content-Type: multipart/alternative;
+	boundary="_000_D13CF1B085F0437EA31B2A29133C3C25charleshendersonandhend_"
+
+--_000_D13CF1B085F0437EA31B2A29133C3C25charleshendersonandhend_
+Content-Type: text/plain; charset="us-ascii"
+
+
+
+
+Sent from my iPhone
+
+--_000_D13CF1B085F0437EA31B2A29133C3C25charleshendersonandhend_
+Content-Type: text/html; charset="us-ascii"
+Content-ID:
+	<AF83A67906512644A68B1424B310BA4F@NETORGFT15819290.onmicrosoft.com>
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</head>
+<body dir="auto">
+<div dir="ltr"><br>
+<br>
+</div>
+<div dir="ltr"></div>
+<br id="lineBreakAtBeginningOfSignature">
+<div dir="ltr">Sent from my iPhone</div>
+</body>
+</html>
+
+--_000_D13CF1B085F0437EA31B2A29133C3C25charleshendersonandhend_--
+
+--_004_D13CF1B085F0437EA31B2A29133C3C25charleshendersonandhend_
+Content-Type: application/octet-stream;
+	name="Charles_Henderson_and_HENDFAM,_INC.vpptoken 3.plist"
+Content-Description: Charles_Henderson_and_HENDFAM,_INC.vpptoken 3.plist
+Content-Disposition: attachment;
+	filename="Charles_Henderson_and_HENDFAM,_INC.vpptoken 3.plist"; size=1640;
+	creation-date="Sun, 30 Jun 2024 07:02:21 GMT";
+	modification-date="Sun, 30 Jun 2024 07:02:29 GMT"
+Content-ID:
+	<58233B70C65C5A408EBEBA3E379BAF80@NETORGFT15819290.onmicrosoft.com>
+Content-Transfer-Encoding: base64
+
+LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0NCk1JSURCekNDQWU4Q0FRQXdBREND
+QVNJd0RRWUpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFOWlANCndPUTdiK3ljdlpU
+ZEx4QklqUEZCM1NaYmxJbFllcnNoVCtIRTl2SjdER0JZVC85R1I5Wld5ZmFNNWV2NHpRSWwNCkxK
+ZjFaTnU2WEpMUVdDYSs1eC92SzdMMlZyY3hER1hiS1pXSnZvYVE4bnUxZTY4UTc0V1RCaEIyVG1L
+T00ydmcNClBVRGxlcDliNThiZHRYM2R1dE4zSDA5dHFlV3RQY2JtalZwSDRGMHROZkRXeXNzZEVD
+QkJEQVNHRG9rUThveGkNClJFUzd3NlErZ2FnL1BlbWl1amhMWmVBL21qb0REcjYxYzA3YXF5WHBJ
+YWRQaGtTNmgzN2RXcU9zMFdlYzBqaHcNCmpHR0pkTUhTbnRSamNwVHBsL0hValpnL081NjE5NUNW
+M1JVZ2lmNU55ZjJjR1hEc0swcHh0QXN1N2p5WERzLzINClRCaE96cWtyYmt4ZUdFbUNQSThDQXdF
+QUFhQ0J3VEFaQmdrcWhraUc5dzBCQ1FjeERBd0tUR2wyWlRGc2FXWmwNCklUQWpCZ2txaGtpRzl3
+MEJDUUl4RmhNVVNFVk9SRVpCVFNCUVFWSlVUa1ZTVXkxQlZGZ3dmd1lKS29aSWh2Y04NCkFRa09N
+WEl3Y0RBUEJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJRRnkyemxCMFdTYm9udUpI
+aisNCjZNRElrcmtWNHpBTEJnTlZIUThFQkFNQ0FRWXdFUVlKWUlaSUFZYjRRZ0VCQkFRREFnQUhN
+QjRHQ1dDR1NBR0cNCitFSUJEUVFSRmc5NFkyRWdZMlZ5ZEdsbWFXTmhkR1V3RFFZSktvWklodmNO
+QVFFT0JRQURnZ0VCQUNqZEp4dHINCnVObUFTR0hZdVNSRnppSGkzRldWemJON2hpNVo4Z3p2dUts
+RW1FTjdmSFhMRzkwZzMxYS9TMGJ2VWw5ODZBZVcNCnVHVmFJci9rNHZOSHNzRFd5Q1d1VVZRT1Y4
+ZXo5blhkaDhUY1ZNODBpVWRDaTBBZmxIcTVXWDRKZHMrdUVRQk0NCjdiaE9JY0ZtY2h1ZXdybFd6
+c21VbGs3b1hZL3FMc3dSYi8xVkk3TkZPMm1DSTMxdnF1MnhzL2ZsaDBId2FKMTENCm5zM1ZzeDVY
+UTI3bURtRUFBM0FaSU1rdm0zaUxYdkN3d05sRTlwNUFLY0dZUVgydTlTRWpoVkgrMHlSV3YvdG0N
+Ckl3ZzZCWXpUYnlVVU50OWNLYkFiNXA2RHVpZ0Q5eGlza0gzVHJXOE4xWGpaUGpDNmYyajMwT3BV
+TC9EM3ZuZXgNCmJyUUluT0l5bmJjY0U5WT0NCi0tLS0tRU5EIENFUlRJRklDQVRFIFJFUVVFU1Qt
+LS0tLQ0K
+
+--_004_D13CF1B085F0437EA31B2A29133C3C25charleshendersonandhend_--
+
+-----BEGIN CERTIFICATE-----
+MIIDGzCCAtugAwIBAgIJAL6pALeLZHDvMAkGByqGSM44BAMwIzEhMB8GA1UEAxMY
+VG9rZW4gU2lnbmluZyBQdWJsaWMgS2V5MB4XDTE2MDUwOTIwNDA1NVoXDTIxMDUw
+ODIwNDA1NVowIzEhMB8GA1UEAxMYVG9rZW4gU2lnbmluZyBQdWJsaWMgS2V5MIIB
+tzCCASwGByqGSM44BAEwggEfAoGBAKmnM6FKnJ1osHWBHd8jHFFMDNwygIcof9Ef
+HW6xJbU2uIzVV5WRu251RbRbmOqozesK44vkeBx9Ntl7PSu0W5RJFCEw9o4RLG0J
+40MWDNDQ+7iqvIsM6lsgZrDjNoWJ2t/Yrnnp0r3F9YNtj7J4vgLCYNOlkr2kcfGi
+ji+SXotXAhUAqGI2zlbARtjz+simu2PihUPkV1MCgYEAnrIIXPvjKvWiXd3uve7e
+DS8qRHW7yoAseVLgeEIbS4VSj/9iQqunx1weQGlds75CLZgpcrY4Z5wbkxSjnK1E
+V30qce4+VzgXYGLZIAvl78wbAMFrG0josXccAbmqVM4LX2Z5yu1TEpPZLvgiaV4g
+Jk4jsYhInqPm3Bw2qQ+gZokDgYQAAoGAFozcPQdM9MmszvEWMXuFrfEA8kVMnKIy
+A60paSi7CIecSAlsRLyw3D9J9pRW6HHdRZgOrKvnNcY63gKB56SKyj6r3nGqtkwE
+pu9yw1K+k2aSyJcKPHYVNw1Um5McKJgQJ49ShJFPaWXfDZPOCpgMpdzibnWjMcTa
+k5rz4FHSUtOjgZgwgZUwHQYDVR0OBBYEFKNT6lUDzQppxFhwtv/jkSCRx596MFMG
+A1UdIwRMMEqAFKNT6lUDzQppxFhwtv/jkSCRx596oSekJTAjMSEwHwYDVQQDExhU
+b2tlbiBTaWduaW5nIFB1YmxpYyBLZXmCCQC+qQC3i2Rw7zASBgNVHRMBAf8ECDAG
+AQH/AgEAMAsGA1UdDwQEAwIBxjAJBgcqhkjOOAQDAy8AMCwCFGjnp838qB/wTUdv
+oRt4G3aW0fv0AhRe8cZDdOveTDCbWane65nlVv0Udw==
+-----END CERTIFICATE-----
+
+Content-Type: application/pkcs7-mime; name="smime.p7m"; smime-type=enveloped-data
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7m"
+Content-Description: S/MIME Encrypted Message
+
+MIAGCSqGSIb3DQEHA6CAMIACAQAxggGpMIIBpQIBADCBjDB4MXYwEQYKCZImiZPyLGQBGRYDbmV0
+MBUGCgmSJomT8ixkARkWB3dpbmRvd3MwHQYDVQQDExZNUy1Pcmdhbml6YXRpb24tQWNjZXNzMCsG
+A1UECxMkODJkYmFjYTQtM2U4MS00NmNhLTljNzMtMDk1MGMxZWFjYTk3AhAUdgDkG0FyuUJWUS+u
+QeZ2MA0GCSqGSIb3DQEBAQUABIIBADP2RbKXL8THLMXy8mvhXsrePKDce6JNcbPqIVAteKaOvWLs
+1wfkpDhWAYmO23pHb+EUXHJ1DuayfBjIhV9SPRqu5Mlgz4DW3hKfqyYle9xQ3zAC/5UQl24yrT2B
+xrfD2AXT018KuM9/Z5c2rYgJy0PfW4iUZ9jVEf9JtPBRidr594XFctXllKc4zwig+SbaSNysDI5I
+Am2YwWz010/XHo7xnwEJo4yUhU1YbJzYfoZTLmLRzpYbVhZlRtnTnhvU99QCCkOcegGJJmwuialf
+PpJuTqxleAU8xYZmbBmsOiEkwF8NCpWBRLWX1s8tucAvbHjqptAE4FmaQhu/QRUGtMQwgAYJKoZI
+hvcNAQcBMB0GCWCGSAFlAwQBAgQQlc07yvqyTOKtZA9bnkYNoqCABIICAC7G4Y5t4qkX1wyDZrQv
+S82i9ZFa8s+7Kt7iEaHQc7YsZiGuPLIt/Ko0vueFtBWG98ZgahH4kg9p8O1KUHvK4O4pxGy3uzzf
+xOLkAPTxCzGEoGhVGe4wXNLqMkUKEKc+TDaVNi74LmwUJImKNaXoJodYdVL0eRkHPrufkAqPt6ps
+1/MGTXG6kYnGfdkcrVMx+BX0ztlFf6IbZ45oKvqzA5GG9ZCs8zM+lpFIrQf1qUyKKv7wxjAi1eiE
+jbYCRQlpZ3Dr8F9PiG6AKWWM7zxKCxK8RLDds3NlP3p16qjK6hgl9TdgBSslzd9ae77U0qsjTR+y
++G+Ch/+xJgUFDymycBeH/L5BNNEeRvUY7/7QhkDkdW0PsBdYUZNwHX6PpwjmgoG8+ucfrDimoTFm
+UvunYQjo1/mhla3UfWyxyPBofncOKMd0QUzK41OZYuEYSlTraHZvfJW4OQYulp6fB/tv5MYe6/K7
+Avk8chPQEV4T4G+toksZf2xwlFSdax+X3gdETPXM8GK1tOCwFTfXW6OfnpTmCzLUksOhzUb2iqCj
+MPy1oX7hHfP04ci3jIB5j50zEUwanp7ZyCx6tfJyqhy7YTc9/CHSOJD7c+U6lWsrUET6q3cDNOhT
+P1U8fhTBUkSbcbAFxDkkbTYy7DQfgb2MQSDDH6laGRaFvPzFPyFGxeOfAAAAAAAAAAAAAA==
+
+[1]Certificate Policy:
+     Policy Identifier=1.3.6.1.4.1.38064.1.3.1.4
+     [1,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[2]Certificate Policy:
+     Policy Identifier=1.3.6.1.4.1.38064.1.3.3.2
+     [2,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[3]Certificate Policy:
+     Policy Identifier=2.23.140.1.1
+     [3,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[4]Certificate Policy:
+     Policy Identifier=2.23.140.1.3
+     [4,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[1]Certificate Policy:
+     Policy Identifier=2.16.840.1.114414.1.7.23.3
+     [1,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[1]Certificate Policy:
+     Policy Identifier=2.16.840.1.114413.1.7.23.3
+     [1,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+KeyID=d2c4b0d291d44c1171b361cb3d[1]Certificate Policy:
+     Policy Identifier=2.16.840.1.114413.1.7.23.3
+     [1,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[2]Certificate Policy:
+     Policy Identifier=2.16.840.1.114414.1.7.23.3
+     [2,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+a1fedda86ad4e3
+Certificate Issuer:
+     Directory Address:
+          OU=Go Daddy Class 2 Certification Authority
+          O="The Go Daddy Group, Inc."
+          C=US
+Certificate SerialNumber=00
+Content-Type: application/pkcs7-mime; name="smime.p7m"; smime-type=enveloped-data
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7m"
+Content-Description: S/MIME Encrypted Message
+
+MIAGCSqGSIb3DQEHA6CAMIACAQAxggGpMIIBpQIBADCBjDB4MXYwEQYKCZImiZPyLGQBGRYDbmV0
+MBUGCgmSJomT8ixkARkWB3dpbmRvd3MwHQYDVQQDExZNUy1Pcmdhbml6YXRpb24tQWNjZXNzMCsG
+A1UECxMkODJkYmFjYTQtM2U4MS00NmNhLTljNzMtMDk1MGMxZWFjYTk3AhAUdgDkG0FyuUJWUS+u
+QeZ2MA0GCSqGSIb3DQEBAQUABIIBADP2RbKXL8THLMXy8mvhXsrePKDce6JNcbPqIVAteKaOvWLs
+1wfkpDhWAYmO23pHb+EUXHJ1DuayfBjIhV9SPRqu5Mlgz4DW3hKfqyYle9xQ3zAC/5UQl24yrT2B
+xrfD2AXT018KuM9/Z5c2rYgJy0PfW4iUZ9jVEf9JtPBRidr594XFctXllKc4zwig+SbaSNysDI5I
+Am2YwWz010/XHo7xnwEJo4yUhU1YbJzYfoZTLmLRzpYbVhZlRtnTnhvU99QCCkOcegGJJmwuialf
+PpJuTqxleAU8xYZmbBmsOiEkwF8NCpWBRLWX1s8tucAvbHjqptAE4FmaQhu/QRUGtMQwgAYJKoZI
+hvcNAQcBMB0GCWCGSAFlAwQBAgQQlc07yvqyTOKtZA9bnkYNoqCABIICAC7G4Y5t4qkX1wyDZrQv
+S82i9ZFa8s+7Kt7iEaHQc7YsZiGuPLIt/Ko0vueFtBWG98ZgahH4kg9p8O1KUHvK4O4pxGy3uzzf
+xOLkAPTxCzGEoGhVGe4wXNLqMkUKEKc+TDaVNi74LmwUJImKNaXoJodYdVL0eRkHPrufkAqPt6ps
+1/MGTXG6kYnGfdkcrVMx+BX0ztlFf6IbZ45oKvqzA5GG9ZCs8zM+lpFIrQf1qUyKKv7wxjAi1eiE
+jbYCRQlpZ3Dr8F9PiG6AKWWM7zxKCxK8RLDds3NlP3p16qjK6hgl9TdgBSslzd9ae77U0qsjTR+y
++G+Ch/+xJgUFDymycBeH/L5BNNEeRvUY7/7QhkDkdW0PsBdYUZNwHX6PpwjmgoG8+ucfrDimoTFm
+UvunYQjo1/mhla3UfWyxyPBofncOKMd0QUzK41OZYuEYSlTraHZvfJW4OQYulp6fB/tv5MYe6/K7
+Avk8chPQEV4T4G+toksZf2xwlFSdax+X3gdETPXM8GK1tOCwFTfXW6OfnpTmCzLUksOhzUb2iqCj
+MPy1oX7hHfP04ci3jIB5j50zEUwanp7ZyCx6tfJyqhy7YTc9/CHSOJD7c+U6lWsrUET6q3cDNOhT
+P1U8fhTBUkSbcbAFxDkkbTYy7DQfgb2MQSDDH6laGRaFvPzFPyFGxeOfAAAAAAAAAAAAAA==
+
+[1]Certificate Policy:
+     Policy Identifier=1.3.6.1.4.1.38064.1.3.1.4
+     [1,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[2]Certificate Policy:
+     Policy Identifier=1.3.6.1.4.1.38064.1.3.3.2
+     [2,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[3]Certificate Policy:
+     Policy Identifier=2.23.140.1.1
+     [3,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[4]Certificate Policy:
+     Policy Identifier=2.23.140.1.3
+     [4,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[1]Certificate Policy:
+     Policy Identifier=2.16.840.1.114414.1.7.23.3
+     [1,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[1]Certificate Policy:
+     Policy Identifier=2.16.840.1.114413.1.7.23.3
+     [1,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+KeyID=d2c4b0d291d44c1171b361cb3d[1]Certificate Policy:
+     Policy Identifier=2.16.840.1.114413.1.7.23.3
+     [1,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[2]Certificate Policy:
+     Policy Identifier=2.16.840.1.114414.1.7.23.3
+     [2,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+a1fedda86ad4e3
+Certificate Issuer:
+     Directory Address:
+          OU=Go Daddy Class 2 Certification Authority
+          O="The Go Daddy Group, Inc."
+          C=US
+Certificate SerialNumber=00
+Content-Type: application/pkcs7-mime; name="smime.p7m"; smime-type=enveloped-data
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7m"
+Content-Description: S/MIME Encrypted Message
+
+MIAGCSqGSIb3DQEHA6CAMIACAQAxggGpMIIBpQIBADCBjDB4MXYwEQYKCZImiZPyLGQBGRYDbmV0
+MBUGCgmSJomT8ixkARkWB3dpbmRvd3MwHQYDVQQDExZNUy1Pcmdhbml6YXRpb24tQWNjZXNzMCsG
+A1UECxMkODJkYmFjYTQtM2U4MS00NmNhLTljNzMtMDk1MGMxZWFjYTk3AhAUdgDkG0FyuUJWUS+u
+QeZ2MA0GCSqGSIb3DQEBAQUABIIBADP2RbKXL8THLMXy8mvhXsrePKDce6JNcbPqIVAteKaOvWLs
+1wfkpDhWAYmO23pHb+EUXHJ1DuayfBjIhV9SPRqu5Mlgz4DW3hKfqyYle9xQ3zAC/5UQl24yrT2B
+xrfD2AXT018KuM9/Z5c2rYgJy0PfW4iUZ9jVEf9JtPBRidr594XFctXllKc4zwig+SbaSNysDI5I
+Am2YwWz010/XHo7xnwEJo4yUhU1YbJzYfoZTLmLRzpYbVhZlRtnTnhvU99QCCkOcegGJJmwuialf
+PpJuTqxleAU8xYZmbBmsOiEkwF8NCpWBRLWX1s8tucAvbHjqptAE4FmaQhu/QRUGtMQwgAYJKoZI
+hvcNAQcBMB0GCWCGSAFlAwQBAgQQlc07yvqyTOKtZA9bnkYNoqCABIICAC7G4Y5t4qkX1wyDZrQv
+S82i9ZFa8s+7Kt7iEaHQc7YsZiGuPLIt/Ko0vueFtBWG98ZgahH4kg9p8O1KUHvK4O4pxGy3uzzf
+xOLkAPTxCzGEoGhVGe4wXNLqMkUKEKc+TDaVNi74LmwUJImKNaXoJodYdVL0eRkHPrufkAqPt6ps
+1/MGTXG6kYnGfdkcrVMx+BX0ztlFf6IbZ45oKvqzA5GG9ZCs8zM+lpFIrQf1qUyKKv7wxjAi1eiE
+jbYCRQlpZ3Dr8F9PiG6AKWWM7zxKCxK8RLDds3NlP3p16qjK6hgl9TdgBSslzd9ae77U0qsjTR+y
++G+Ch/+xJgUFDymycBeH/L5BNNEeRvUY7/7QhkDkdW0PsBdYUZNwHX6PpwjmgoG8+ucfrDimoTFm
+UvunYQjo1/mhla3UfWyxyPBofncOKMd0QUzK41OZYuEYSlTraHZvfJW4OQYulp6fB/tv5MYe6/K7
+Avk8chPQEV4T4G+toksZf2xwlFSdax+X3gdETPXM8GK1tOCwFTfXW6OfnpTmCzLUksOhzUb2iqCj
+MPy1oX7hHfP04ci3jIB5j50zEUwanp7ZyCx6tfJyqhy7YTc9/CHSOJD7c+U6lWsrUET6q3cDNOhT
+P1U8fhTBUkSbcbAFxDkkbTYy7DQfgb2MQSDDH6laGRaFvPzFPyFGxeOfAAAAAAAAAAAAAA==
+
+[1]Certificate Policy:
+     Policy Identifier=1.3.6.1.4.1.38064.1.3.1.4
+     [1,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[2]Certificate Policy:
+     Policy Identifier=1.3.6.1.4.1.38064.1.3.3.2
+     [2,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[3]Certificate Policy:
+     Policy Identifier=2.23.140.1.1
+     [3,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[4]Certificate Policy:
+     Policy Identifier=2.23.140.1.3
+     [4,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[1]Certificate Policy:
+     Policy Identifier=2.16.840.1.114414.1.7.23.3
+     [1,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[1]Certificate Policy:
+     Policy Identifier=2.16.840.1.114413.1.7.23.3
+     [1,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+KeyID=d2c4b0d291d44c1171b361cb3d[1]Certificate Policy:
+     Policy Identifier=2.16.840.1.114413.1.7.23.3
+     [1,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[2]Certificate Policy:
+     Policy Identifier=2.16.840.1.114414.1.7.23.3
+     [2,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+a1fedda86ad4e3
+Certificate Issuer:
+     Directory Address:
+          OU=Go Daddy Class 2 Certification Authority
+          O="The Go Daddy Group, Inc."
+          C=US
+Certificate SerialNumber=00
+Content-Type: application/pkcs7-mime; name="smime.p7m"; smime-type=enveloped-data
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7m"
+Content-Description: S/MIME Encrypted Message
+
+MIAGCSqGSIb3DQEHA6CAMIACAQAxggGpMIIBpQIBADCBjDB4MXYwEQYKCZImiZPyLGQBGRYDbmV0
+MBUGCgmSJomT8ixkARkWB3dpbmRvd3MwHQYDVQQDExZNUy1Pcmdhbml6YXRpb24tQWNjZXNzMCsG
+A1UECxMkODJkYmFjYTQtM2U4MS00NmNhLTljNzMtMDk1MGMxZWFjYTk3AhAUdgDkG0FyuUJWUS+u
+QeZ2MA0GCSqGSIb3DQEBAQUABIIBADP2RbKXL8THLMXy8mvhXsrePKDce6JNcbPqIVAteKaOvWLs
+1wfkpDhWAYmO23pHb+EUXHJ1DuayfBjIhV9SPRqu5Mlgz4DW3hKfqyYle9xQ3zAC/5UQl24yrT2B
+xrfD2AXT018KuM9/Z5c2rYgJy0PfW4iUZ9jVEf9JtPBRidr594XFctXllKc4zwig+SbaSNysDI5I
+Am2YwWz010/XHo7xnwEJo4yUhU1YbJzYfoZTLmLRzpYbVhZlRtnTnhvU99QCCkOcegGJJmwuialf
+PpJuTqxleAU8xYZmbBmsOiEkwF8NCpWBRLWX1s8tucAvbHjqptAE4FmaQhu/QRUGtMQwgAYJKoZI
+hvcNAQcBMB0GCWCGSAFlAwQBAgQQlc07yvqyTOKtZA9bnkYNoqCABIICAC7G4Y5t4qkX1wyDZrQv
+S82i9ZFa8s+7Kt7iEaHQc7YsZiGuPLIt/Ko0vueFtBWG98ZgahH4kg9p8O1KUHvK4O4pxGy3uzzf
+xOLkAPTxCzGEoGhVGe4wXNLqMkUKEKc+TDaVNi74LmwUJImKNaXoJodYdVL0eRkHPrufkAqPt6ps
+1/MGTXG6kYnGfdkcrVMx+BX0ztlFf6IbZ45oKvqzA5GG9ZCs8zM+lpFIrQf1qUyKKv7wxjAi1eiE
+jbYCRQlpZ3Dr8F9PiG6AKWWM7zxKCxK8RLDds3NlP3p16qjK6hgl9TdgBSslzd9ae77U0qsjTR+y
++G+Ch/+xJgUFDymycBeH/L5BNNEeRvUY7/7QhkDkdW0PsBdYUZNwHX6PpwjmgoG8+ucfrDimoTFm
+UvunYQjo1/mhla3UfWyxyPBofncOKMd0QUzK41OZYuEYSlTraHZvfJW4OQYulp6fB/tv5MYe6/K7
+Avk8chPQEV4T4G+toksZf2xwlFSdax+X3gdETPXM8GK1tOCwFTfXW6OfnpTmCzLUksOhzUb2iqCj
+MPy1oX7hHfP04ci3jIB5j50zEUwanp7ZyCx6tfJyqhy7YTc9/CHSOJD7c+U6lWsrUET6q3cDNOhT
+P1U8fhTBUkSbcbAFxDkkbTYy7DQfgb2MQSDDH6laGRaFvPzFPyFGxeOfAAAAAAAAAAAAAA==
+
+[1]Certificate Policy:
+     Policy Identifier=1.3.6.1.4.1.38064.1.3.1.4
+     [1,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[2]Certificate Policy:
+     Policy Identifier=1.3.6.1.4.1.38064.1.3.3.2
+     [2,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[3]Certificate Policy:
+     Policy Identifier=2.23.140.1.1
+     [3,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[4]Certificate Policy:
+     Policy Identifier=2.23.140.1.3
+     [4,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[1]Certificate Policy:
+     Policy Identifier=2.16.840.1.114414.1.7.23.3
+     [1,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[1]Certificate Policy:
+     Policy Identifier=2.16.840.1.114413.1.7.23.3
+     [1,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+KeyID=d2c4b0d291d44c1171b361cb3d[1]Certificate Policy:
+     Policy Identifier=2.16.840.1.114413.1.7.23.3
+     [1,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+[2]Certificate Policy:
+     Policy Identifier=2.16.840.1.114414.1.7.23.3
+     [2,1]Policy Qualifier Info:
+          Policy Qualifier Id=Root Program Flags
+          Qualifier:
+               c0
+a1fedda86ad4e3
+Certificate Issuer:
+     Directory Address:
+          OU=Go Daddy Class 2 Certification Authority
+          O="The Go Daddy Group, Inc."
+          C=US
+Certificate SerialNumber=00
+Received: from BY3PR18MB4673.namprd18.prod.outlook.com (2603:10b6:a03:3c4::20)
+ by IA2PR18MB5861.namprd18.prod.outlook.com with HTTPS; Sun, 30 Jun 2024
+ 07:02:29 +0000
+Received: from CH0PR03CA0207.namprd03.prod.outlook.com (2603:10b6:610:e4::32)
+ by BY3PR18MB4673.namprd18.prod.outlook.com (2603:10b6:a03:3c4::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.29; Sun, 30 Jun
+ 2024 07:02:27 +0000
+Received: from CH1PEPF0000AD82.namprd04.prod.outlook.com
+ (2603:10b6:610:e4:cafe::93) by CH0PR03CA0207.outlook.office365.com
+ (2603:10b6:610:e4::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.29 via Frontend
+ Transport; Sun, 30 Jun 2024 07:02:27 +0000
+Received: from us2-emailsignatures-cloud.codetwo.com (52.240.209.173) by
+ CH1PEPF0000AD82.mail.protection.outlook.com (10.167.244.91) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7741.18 via Frontend Transport; Sun, 30 Jun 2024 07:02:27 +0000
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.40) by us2-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Sun, 30 Jun 2024 07:02:25 +0000
+Received: from MW5PR18MB5149.namprd18.prod.outlook.com (2603:10b6:303:1c7::13)
+ by BL1PR18MB4165.namprd18.prod.outlook.com (2603:10b6:208:310::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.29; Sun, 30 Jun
+ 2024 07:02:22 +0000
+Received: from MW5PR18MB5149.namprd18.prod.outlook.com
+ ([fe80::d355:ae9e:2b7:1579]) by MW5PR18MB5149.namprd18.prod.outlook.com
+ ([fe80::d355:ae9e:2b7:1579%4]) with mapi id 15.20.7698.024; Sun, 30 Jun 2024
+ 07:02:21 +0000
+From: Tim Henderson <contact@charleshendersonandhendfam.online>
+To: "Charles Henderson and HENDFAM, INC."
+	<tim@charleshendersonandhendfam.online>
+Subject:
+Thread-Index: AQHayrtzJEbZVUtEAUuw4KwaPg3Sug==
+Date: Sun, 30 Jun 2024 07:02:21 +0000
+Message-ID:
+	<D13CF1B0-85F0-437E-A31B-2A29133C3C25@charleshendersonandhendfam.online>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Exchange-Organization-AuthAs: Internal
+X-MS-Exchange-Organization-AuthMechanism: 04
+X-MS-Exchange-Organization-AuthSource: MW5PR18MB5149.namprd18.prod.outlook.com
+X-MS-Has-Attach: yes
+X-MS-Exchange-Organization-Network-Message-Id:
+	546afe3a-a675-4cde-3a92-08dc98d299e1
+X-MS-Exchange-Organization-SCL: 1
+X-MS-TNEF-Correlator:
+X-MS-Exchange-Organization-RecordReviewCfmType: 0
+x-ms-publictraffictype: Email
+received-spf: Fail (protection.outlook.com: domain of
+ charleshendersonandhendfam.online does not designate 52.240.209.173 as
+ permitted sender) receiver=protection.outlook.com; client-ip=52.240.209.173;
+ helo=us2-emailsignatures-cloud.codetwo.com;
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(425001)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	MXap4k0tPsfgBSllwTdUTIvFn4HGrJLzyBHRZ4Dy1L3Qwvcx2PNT/ysXKDQUxb0VZyNhEdESACGaS2h+xQPZ1B9pQ74d+ckom6yBUwyaJ1hLGYHA5m1GTzapBAT9ghGoZqqawHbDRjgl4JOXPU9zthq9JiwjqpAdmcgPXYJ59jJD6qvYq+lQO8W9JHYokTO13A0yYvedYs70ZJ64XUVXLA09xqFoXrWfc7gCBCo4Ji6sgcQ4VINTcB9XLkwJbhW+ZLNgmuH/133SWWCdWqWRMY1/8FVSlA0JFLkk2BX5DMbML9QayZrcfuN0EDAE/ouAIPzpcXz57pUerETfndzFm0SfLzhvKIYXY5P4QD6fsq5WNnboKKolZ7lw1wAq3d9wabn8yll9OtQmwp0g6BvZGsBNARrkHL1a4+tg3SIM6LmSJ2AHMhwBjXW9I+Af1zrFpWj0tJ+nJHtNzlzOGnLJwoqW+/dPUUiBApoQ5iQZSqDs/QJ0BGf8b35VkTmDkbNeeKiJPgd2OY35HsvpmMoYx8XHaPP2QXie/cvxdxgoTKbNatwLostTRMYBYxUVYT0tDqpcpTxoR6rxfdhMA0aCny0AbVtXDbiSQC8XKypU24qSC6a5jDAAvANj6HWi7EovDlWrE3+L+CbC30KG+yPOjcvfgg5kNa84Xm9gWNxAZqpw4Qq/oiTUzriirWbgFJDpI1cL76kXSK65w9PnnAaYdzlJGoitVWDUVrl0T6CwxiB9iXB1BKVgGk5+u4z/4lWQsZ0d+IkQkQ+oKA33JAYTArDTzyMKStt1KUj/JyaUgJrPKryKWAkLqJc55e4qiCdIQWHXuGQnPgl8JZFzktooZ1pns2b73l+qZwewFyc7nCEH8pIwdo4xcow1xw3dbQGsQbxsCYqBUqaCVZ2mpxQBD2IbXjTliCyCEeIGKMmIrns=
+Content-Type: multipart/mixed;
+	boundary="_004_D13CF1B085F0437EA31B2A29133C3C25charleshendersonandhend_"
+MIME-Version: 1.0
+
+--_004_D13CF1B085F0437EA31B2A29133C3C25charleshendersonandhend_
+Content-Type: multipart/alternative;
+	boundary="_000_D13CF1B085F0437EA31B2A29133C3C25charleshendersonandhend_"
+
+--_000_D13CF1B085F0437EA31B2A29133C3C25charleshendersonandhend_
+Content-Type: text/plain; charset="us-ascii"
+
+
+
+
+Sent from my iPhone
+
+--_000_D13CF1B085F0437EA31B2A29133C3C25charleshendersonandhend_
+Content-Type: text/html; charset="us-ascii"
+Content-ID:
+	<AF83A67906512644A68B1424B310BA4F@NETORGFT15819290.onmicrosoft.com>
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</head>
+<body dir="auto">
+<div dir="ltr"><br>
+<br>
+</div>
+<div dir="ltr"></div>
+<br id="lineBreakAtBeginningOfSignature">
+<div dir="ltr">Sent from my iPhone</div>
+</body>
+</html>
+
+--_000_D13CF1B085F0437EA31B2A29133C3C25charleshendersonandhend_--
+
+--_004_D13CF1B085F0437EA31B2A29133C3C25charleshendersonandhend_
+Content-Type: application/octet-stream;
+	name="Charles_Henderson_and_HENDFAM,_INC.vpptoken 3.plist"
+Content-Description: Charles_Henderson_and_HENDFAM,_INC.vpptoken 3.plist
+Content-Disposition: attachment;
+	filename="Charles_Henderson_and_HENDFAM,_INC.vpptoken 3.plist"; size=1640;
+	creation-date="Sun, 30 Jun 2024 07:02:21 GMT";
+	modification-date="Sun, 30 Jun 2024 07:02:29 GMT"
+Content-ID:
+	<58233B70C65C5A408EBEBA3E379BAF80@NETORGFT15819290.onmicrosoft.com>
+Content-Transfer-Encoding: base64
+
+LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0NCk1JSURCekNDQWU4Q0FRQXdBREND
+QVNJd0RRWUpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFOWlANCndPUTdiK3ljdlpU
+ZEx4QklqUEZCM1NaYmxJbFllcnNoVCtIRTl2SjdER0JZVC85R1I5Wld5ZmFNNWV2NHpRSWwNCkxK
+ZjFaTnU2WEpMUVdDYSs1eC92SzdMMlZyY3hER1hiS1pXSnZvYVE4bnUxZTY4UTc0V1RCaEIyVG1L
+T00ydmcNClBVRGxlcDliNThiZHRYM2R1dE4zSDA5dHFlV3RQY2JtalZwSDRGMHROZkRXeXNzZEVD
+QkJEQVNHRG9rUThveGkNClJFUzd3NlErZ2FnL1BlbWl1amhMWmVBL21qb0REcjYxYzA3YXF5WHBJ
+YWRQaGtTNmgzN2RXcU9zMFdlYzBqaHcNCmpHR0pkTUhTbnRSamNwVHBsL0hValpnL081NjE5NUNW
+M1JVZ2lmNU55ZjJjR1hEc0swcHh0QXN1N2p5WERzLzINClRCaE96cWtyYmt4ZUdFbUNQSThDQXdF
+QUFhQ0J3VEFaQmdrcWhraUc5dzBCQ1FjeERBd0tUR2wyWlRGc2FXWmwNCklUQWpCZ2txaGtpRzl3
+MEJDUUl4RmhNVVNFVk9SRVpCVFNCUVFWSlVUa1ZTVXkxQlZGZ3dmd1lKS29aSWh2Y04NCkFRa09N
+WEl3Y0RBUEJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJRRnkyemxCMFdTYm9udUpI
+aisNCjZNRElrcmtWNHpBTEJnTlZIUThFQkFNQ0FRWXdFUVlKWUlaSUFZYjRRZ0VCQkFRREFnQUhN
+QjRHQ1dDR1NBR0cNCitFSUJEUVFSRmc5NFkyRWdZMlZ5ZEdsbWFXTmhkR1V3RFFZSktvWklodmNO
+QVFFT0JRQURnZ0VCQUNqZEp4dHINCnVObUFTR0hZdVNSRnppSGkzRldWemJON2hpNVo4Z3p2dUts
+RW1FTjdmSFhMRzkwZzMxYS9TMGJ2VWw5ODZBZVcNCnVHVmFJci9rNHZOSHNzRFd5Q1d1VVZRT1Y4
+ZXo5blhkaDhUY1ZNODBpVWRDaTBBZmxIcTVXWDRKZHMrdUVRQk0NCjdiaE9JY0ZtY2h1ZXdybFd6
+c21VbGs3b1hZL3FMc3dSYi8xVkk3TkZPMm1DSTMxdnF1MnhzL2ZsaDBId2FKMTENCm5zM1ZzeDVY
+UTI3bURtRUFBM0FaSU1rdm0zaUxYdkN3d05sRTlwNUFLY0dZUVgydTlTRWpoVkgrMHlSV3YvdG0N
+Ckl3ZzZCWXpUYnlVVU50OWNLYkFiNXA2RHVpZ0Q5eGlza0gzVHJXOE4xWGpaUGpDNmYyajMwT3BV
+TC9EM3ZuZXgNCmJyUUluT0l5bmJjY0U5WT0NCi0tLS0tRU5EIENFUlRJRklDQVRFIFJFUVVFU1Qt
+LS0tLQ0K
+
+--_004_D13CF1B085F0437EA31B2A29133C3C25charleshendersonandhend_--
+flower wink wrestle final reduce grape rescue mutual word snap smile smallflower wink wrestle final reduce grape rescue mutual word snap smile smallもদȁ̰舉戆प虈蛷ഁ܁ꂂ॓҂ॏもोもे؉⪆䢆ćڠ舉㠰舉㐂Āもभ؉⪆䢆ćİᰆਪ虈蛷ഁఁ̰คࢥ琨狐뤂ȇ킀舉Ù琯얐宱䮑쌯鋈焍쫠痖牑喍鸺͊읍ꎭ翊클締屼䯎媚쟢̑與誈ႇ넧옐巁혆댩［竆씏ࢎ㥿⬵蹞ℹૠ쳡惫 ꄒ錸䧗쇯ὢ ፔÉ绵맃埱콺꺄ៅ㌰笛ꅬ鎱뎱ാﺷ잲Ƞ먤櫘陰뼌憽㮔鈇嶁閟龯땿蒡㕛ɂ诳琺␼湽 㛃䂍煝籼흐萧㑽쟅巡ா䲚핡姱蕖舶己鴗嬦働卟卩ᛁ梼뵵皪츦耔踝ꃿ腶力‖靄▸ʚ佇黈 䃗˿ﻒ㛍▢ꩠ퓝ᚏ䢶ꀟ蜣㜲ﰳ⹗꧂噣맡銂俐占⿭ᰄ꺔槑㙳䤄鵭燱젋癟೓뛿Ѻ䧠姛Ⅿๅԟ葴Б蚇ᢪ攵ﮍꤣ璄䇕꽸咪఑侴扼ᐭ꥚䷋䤙熦ﺵ훟ଢ돝픺ᗣ弖獴蓃誌虇岧덊ᵯꛧ✸쵣ሠ歴왆逳᫘蒴δ乒༌㈪ꁔ钣 魞혽⢶긹ꘂ㹧춄ຢ焠ᱮ 뛠 敲⫃瀃஭뜵㇏糿䓡氂阵摒䋐⺋곞꜎讓绋鄬受ˑ癲嫞낪췛᫩㝣癬䀿ᦧ๜鸮舴張욽앑쬵䮸浿揺燴鹈个胙鯄佴粳뫐邽﹤旝ℽﴱ䗰硌氟㮆ꔫ 貳ꔌꜟ獐틎㖝뢏譙땘⚤艖מ外☢ી篿ᗜ誓㱨觖ꊵᅊ嵧帅慵쾬Ṁ卣 䌾奒톋㋱▋셡㟈쬩넧풋쎘돌믦ਈ攼꣄㯝襒ᦼ꜃仦벰觖 횅䛑̶⚲˴␲鮳훏떃ý咦톔阒孶ݾ箱릣⍷诪臃ꉐ㋓⎍裮㌠배ᅵ츇闰མ䬇၉׵ỡ㷌꧜贂鉹欴帣糊ꏈ漡栓斘繎벸០ 烇껯쳎㛢틐䜺䰜敕軬禉ව豎疪䑚貜萼烣⨦ꯋ塑᥯ ڜ处뇩饆ﴐծ挍碌穹薾⸨넽깠ዮ颌垊뗑괣潎ꏅ朚鲸傲  霮鲽䶖쯊꙲筼剮⚶樌睈䚤颃⫗뙺픩匲ꔗ焂졚㣔펇ꃨ㐚綾ቇࡥꚵ㗮靴玈簞덨榀យ릦痲罬炤㋘Ȯꆸ읲띇坷㙛〹ꊟ푛㨞䱀韢䴶蝧 架๢篿썧ﾧ轫 ﯳ喂⢒츭努ⴘ恬Ჭ筛푆 ᏹ䪚躬ꅡ赵ལ莐箳镤䔬偐⁫䔘Ꙫ혔瀄隳鲛 荲쁛焵侐⢤讁垓ᄩ⤧맷낇톚୎휫픕橪춮ꓠ踥苰뢒Ç輀㢎ꥮꯐ缹튮䪕쬨ઔ룿➳໌ꎫﶼ咨쨣ㅄ㾥묩聕뼲둼ꯚ㾋⤗⪀ᐝ丩ᬙ竫 䝺⡘먬ﻏ걷뮰 唣⃞읷喜셸燁쐹ꆾ䴺乱缗䞅꼬甤덤旟锈 鼹ɫ䵾এ윽Ɪ슻␴喁컷⑔偳 ¬䟌獭ꀗ⇧駧⪦翸༴⃊忭㞉ꎼ⦻ᒣ䡫ꙑᝊ貓푻晅╘촓뻻걾隒㏠ﹷ褳矉邧㭲囖㼒欎⑈颚䇒뿠  ᒳ济픰ໂ圉䏝焨팛ಈ⤝Ổ㮎ʹ傰痢〼锏 춀못Ꞥ䟄菢뿅讖⼟䭨ꭁᜀ㲼ﭵ蔔玤籌懃⢖飔坺숋ꊔ൛ ⮅ 仇孎ힳ욖ᨃ喦塹剸秭藏ᥔ䷓ᷱೀ䚱녟䱩룇鬊徚祀뇎 Ꝕﰪ룆燫䚵ꇈ푭ꄺꏝ쓖鸲肪 Ꟗ䞴 鰈鷙꺹藓Ꝓ㭙樐 ⷓ묕㿉뙮睑ﬞ⫉᠁烡렁￢䯊治쌆᧕ꅨ镶ㇼ雛䞺칶鱱㧻곁➶蟍椫剥٠澴씚⎟읤ꡊᢏ 磕晠癗츘첩ᄡ 妒ᓬ ⽐䏢 Ɏ洟쮹쪯ཻ虪ﮬ슔Ĩ牧즣慒숶蚆꥽췗⶗ 钶⳹榆ٸ瀫㱡剅ჸヰ毕ء蚠ๅ汥滺࣊屘ᇕꕲ꽫ꕽ鑘䗟ᝪ䑳㗒餲픠㍃女齁햱ୄ梵 츮觋琶묋醯识늸⿀픿ེ쀻틼᱄幧圄뵮⁶⮾㙜猬灾᱿ꍸ킂庄婛ķ탨ᅻ酢箧菞爫㟲뵨㌷㦭霍փ䙙侃䣗釋灁첄ϟǊ焯ᬮ㣜鲴䙷ź批裦빳덙ꎛ긟ﺀ寡최䆆 踭㽇넟Ţ䏲 欛䀸ਫ਼앖の뢲ꬩ⮽斷렍丆㇠ወⷂ 既㑆繫鵨響⥦⾽﯂훕앧팛చ箌瀈靨즋⹠뎗熅 ᮬ躒㩁콖揠縮汿㗲뚩䓞괃꠴兩暫춆꫊ቪ罨뎞霈怅㔔礣ഡ퉏벪禽뇆肊࣭㪨ᶋᩃ든偪ꪔʗ᥌ע圮嶸Õ肽膒ꛐ拮⼿엒ߛ簾报驴ᱜ褊ⓣ䁭㒎≒橸㽯웊Ꝧ곮 ᘹ⹑틿禾㭽跷蕝⢕⅗냹ᙌ猌啃䉧價耋➥岔툝羆ꚓꪲ浙 猎৅ন瀉纭ⴰ㬰ἰ܆ԫฃȚДꊅ 칎⻝乺ܝ䮧Д᫯늾뙨訶筋슊ṷ瓉㧉Ȃߐ
